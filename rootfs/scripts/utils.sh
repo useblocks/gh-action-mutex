@@ -84,7 +84,7 @@ wait_for_lock() {
 			sleep 5
 			total_sleep_time=$((total_sleep_time + 5))
 			echo "It has been waiting for $total_sleep_time seconds zzz"
-			if [$__timeout -gt 0] && [$total_sleep_time -gt $__timeout]; then
+			if [[ $__timeout -gt 0 && $total_sleep_time -gt $__timeout ]]; then
 				echo "[$__ticket_id] Total sleep time exceeded $__timeout seconds, exiting with code 1"
 				exit 1
 			fi
