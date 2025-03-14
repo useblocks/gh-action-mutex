@@ -19,8 +19,11 @@ __ticket_id="$GITHUB_RUN_ID-$(date +%s)-$(( $RANDOM % 1000 ))"
 # $GITHUB_STATE does NOT exist in the post-entry, so $GITHUB_WORKSPACE is used instead to share the info between entry and post-entry
 # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#sending-values-to-the-pre-and-post-actions
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#runspre-entrypoint
-echo "ticket_id=$__ticket_id" > "$GITHUB_WORKSPACE/.$GITHUB_RUN_ID"
-cat "$GITHUB_WORKSPACE/.$GITHUB_RUN_ID"
+# The file `.$GITHUB_RUN_ID-$ARG_BRANCH` is used to share the info between entry and post-entry
+# As $GITHUB_RUN_ID doesn't exist in GitHub Action, 
+# $ARG_BRANCH is used to concatenate to the file name to avoid the conflict between jobs in the same run
+echo "ticket_id=$__ticket_id" > "$GITHUB_WORKSPACE/.$GITHUB_RUN_ID-$ARG_BRANCH"
+cat "$GITHUB_WORKSPACE/.$GITHUB_RUN_ID-$ARG_BRANCH"
 
 set_up_repo "$__repo_url"
 enqueue $ARG_BRANCH $__mutex_queue_file $__ticket_id
